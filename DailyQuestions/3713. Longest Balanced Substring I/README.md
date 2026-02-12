@@ -1,110 +1,202 @@
-🧩 Longest Balanced Substring I
-📌 Problem Statement
+# 🧩 Longest Balanced Substring I  
+> LeetCode Daily Challenge | String | Frequency Analysis | Enumeration
 
-Given a string s consisting of lowercase English letters, return the length of the longest balanced substring.
+---
 
-A substring is considered balanced if:
+## 🚀 Problem Overview
 
-All distinct characters in the substring appear the same number of times.
+Given a string `s` consisting of lowercase English letters, return the **length of the longest balanced substring**.
 
-🧠 Understanding the Problem
+A substring is **balanced** if:
 
-For any substring:
+> All **distinct characters** in that substring appear the **same number of times**.
 
-Let freq[c] be the frequency of character c
+---
 
-Let the set of distinct characters be {c1, c2, ..., ck}
+## 🔎 Visual Understanding
 
-The substring is balanced if:
+### Example 1
 
-freq[c1] == freq[c2] == ... == freq[ck]
+s = "abba"
 
-🔎 Examples
-Input	Output	Explanation
-"abba"	4	'a' appears 2 times, 'b' appears 2 times
-"abc"	3	Each character appears once
-"aaaa"	4	Only one distinct character, frequency = 4
-🔍 Key Observations
 
-We must evaluate substrings (contiguous).
+| Character | Frequency |
+|-----------|------------|
+| a         | 2          |
+| b         | 2          |
 
-The condition applies only to distinct characters inside that substring.
+✅ All frequencies are equal → Balanced  
+✅ Length = 4  
 
-The alphabet size is fixed (26 lowercase letters).
+---
 
-Since substring count is O(n²), we need an efficient way to check balance.
+### Example 2
 
-🚀 Approach
-Brute Force Strategy (Optimized)
+s = "abcabc"
 
-Fix a starting index i.
 
-Expand the ending index j.
+| Character | Frequency |
+|-----------|------------|
+| a         | 2          |
+| b         | 2          |
+| c         | 2          |
 
-Maintain:
+✅ Balanced  
+✅ Length = 6  
 
-A frequency array of size 26.
+---
 
-Count of distinct characters.
+### Example 3
 
-At every step:
+s = "aabbc"
 
-Collect non-zero frequencies.
 
-If all non-zero frequencies are equal → substring is balanced.
+| Character | Frequency |
+|-----------|------------|
+| a         | 2          |
+| b         | 2          |
+| c         | 1          |
 
-Update maximum length.
+❌ Not balanced (frequencies differ)
 
-Because the alphabet size is constant (26), checking frequencies is efficient.
+---
 
-📊 Complexity Analysis
+## 🧠 Core Insight
 
-Time Complexity:
-O(n² × 26)
-(Two nested loops + constant alphabet check)
+For a substring to be balanced:
 
-Space Complexity:
-O(1)
-(Fixed 26-length frequency array)
+freq(c1) == freq(c2) == ... == freq(ck)
 
-This works well for constraints where n ≤ 1000.
 
-📝 Why Not Use Sliding Window?
+Where:
+- `c1...ck` are distinct characters inside the substring
+- Only non-zero frequencies matter
 
-A typical sliding window approach does not work directly because:
+Since:
+- Alphabet size = 26
+- n ≤ 1000
 
-Frequency equality must hold across all distinct characters.
+We can afford an **O(n²)** approach with optimized frequency tracking.
 
-Adding a character can disturb balance in non-monotonic ways.
+---
 
-Distinct character count dynamically changes.
+## 🛠️ Approach Strategy
 
-Hence, controlled enumeration is safer and simpler.
+### Step 1: Fix Left Boundary
+Iterate `i` from `0 → n-1`.
 
-🎯 Important Notes
+### Step 2: Expand Right Boundary
+For each `i`, extend `j` from `i → n-1`.
 
-A substring with only one distinct character is considered balanced.
+### Step 3: Maintain Frequency Array
+Use an array of size 26:
 
-Always check only non-zero frequencies.
+freq[ord(s[j]) - ord('a')]++
 
-Avoid recalculating frequency maps from scratch inside inner loops.
 
-🧠 Key Takeaways
+### Step 4: Validate Balance
+- Extract non-zero frequencies
+- If all are equal → update maximum length
 
-Problems involving equal frequency of all distinct characters are not prefix-friendly.
+---
 
-When alphabet size is small, brute force with frequency tracking is acceptable.
+## 📊 Algorithm Flow Diagram
 
-Always analyze constraints before over-optimizing.
+Start i
+↓
+Initialize freq[26]
+↓
+Expand j →
+↓
+Update frequency
+↓
+Check:
+Are all non-zero frequencies equal?
+↓
+Yes → Update answer
+No → Continue expanding
 
-Recognize when sliding window is inappropriate.
 
-📌 Pattern Category
+---
 
-String
+## 💡 Why Not Sliding Window?
 
-Frequency Counting
+Sliding window works when:
+- Conditions are monotonic
+- Adding elements doesn't invalidate past structure easily
 
-Enumeration
+Here:
+- Adding one character may break equality
+- Distinct count changes dynamically
+- No prefix subtraction trick applies
 
-Hashing
+Therefore:
+> Controlled enumeration is cleaner and safer.
+
+---
+
+## 📈 Complexity Analysis
+
+| Metric | Value |
+|--------|--------|
+| Time Complexity | **O(n² × 26)** |
+| Space Complexity | **O(1)** |
+| n Constraint | ≤ 1000 |
+| Alphabet Size | 26 |
+
+### Why O(1) Space?
+Frequency array size is constant (26), independent of `n`.
+
+---
+
+## 🎯 Edge Cases Considered
+
+| Input | Output | Reason |
+|-------|--------|--------|
+| `"aaaa"` | 4 | Single distinct char |
+| `"abc"` | 3 | All appear once |
+| `"aabbc"` | 4 | `"aabb"` balanced |
+| `"z"` | 1 | Single char |
+
+---
+
+## 🏷️ Pattern Recognition
+
+This problem teaches:
+
+- Frequency counting
+- Controlled enumeration
+- Recognizing when sliding window fails
+- Working with fixed alphabet optimizations
+
+---
+
+## 🔥 Interview Takeaway
+
+If alphabet size is small:
+> Don’t over-engineer.  
+> Enumeration + frequency array is often optimal.
+
+This demonstrates:
+- Strong constraint analysis
+- Correct pattern recognition
+- Clean implementation thinking
+
+---
+
+## 📌 Tags
+
+`String` `Hashing` `Frequency Counting` `Brute Force Optimization` `Daily Challenge`
+
+---
+
+## 👨‍💻 Author Notes
+
+This solution emphasizes:
+- Correct constraint reading
+- Avoiding premature optimization
+- Writing clean, interview-ready logic
+
+---
+
+⭐ If this helped, consider starring the repo.
